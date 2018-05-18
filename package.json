@@ -1,6 +1,6 @@
 {
   "name": "gulp-qn-upload",
-  "version": "1.0.0",
+  "version": "1.0.2",
   "description": "gulp qn upload",
   "main": "index.js",
   "engines": {
