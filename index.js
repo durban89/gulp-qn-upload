@@ -1,7 +1,7 @@
 'use strict';
 
 const through = require('through2');
-const PluginEror = require('gulp-util').PluginError;
+const PluginError = require('gulp-util').PluginError;
 const colors = require('gulp-util').colors;
 const log = require('gulp-util').log;
 const qn = require('qn');
@@ -29,11 +29,39 @@ module.exports = function(options) {
 
     async.auto({
       stat: function(cb) {
-
+        client.stat(fileKey, function(err, stat) {
+          if (err) {
+            cb(null, true);
+          } else {
+            file.path = options.qiniu.domain + '/' + fileKey;
+            log('Skip:', colors.gray(fileName));
+            cb(null, false);
+          }
+        })
       },
-      upload: ['stat', function(cb, results) {
-        
+      upload: ['stat', function (results, cb) {
+        if (results.stat) {
+          client.uploadFile(file.path, {
+            key: fileKey,
+          }, function (err, result) {
+            if (err) {
+              cb(err);
+            } else {
+              log('Upload: ', colors.green(result.url));
+              file.path = result.url;
+              cb(null, result);
+            }
+          })
+        } else {
+          cb(null);
+        }
       }]
+    }, function(err) {
+      if (err) {
+        log('Error', colors.red(new PluginError('gulp-qn-upload', err).message));
+      }
+
+      callback(null, file);
     })
   });
-}
+};
