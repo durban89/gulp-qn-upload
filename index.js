@@ -23,6 +23,14 @@ module.exports = function(options) {
       return callback(null, file);
     }
 
+    const qiniuConfig = options.qiniu;
+
+    const origin = qiniuConfig.domain || qiniuConfig.origin || '';
+    if (!origin) {
+      log('Error', colors.red(new PluginError('gulp-qn-upload', new Error('`gulp-qn-upload` package: The lost qiniu.domain argument.')).message));
+      return callback(null, file);
+    }
+
     const client = qn.create(options.qiniu);
     const fileName = path.basename(file.path);
     const fileKey = path.join(options.prefix, fileName);
