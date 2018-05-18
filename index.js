@@ -41,7 +41,7 @@ module.exports = function(options) {
           if (err) {
             cb(null, true);
           } else {
-            file.path = options.qiniu.domain + '/' + fileKey;
+            file.path = origin + '/' + fileKey;
             log('Skip:', colors.gray(fileName));
             cb(null, false);
           }
