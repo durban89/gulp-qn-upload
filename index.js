@@ -43,7 +43,7 @@ module.exports = function(options) {
           } else {
             const joinPath = origin + '/' + fileKey;
             file.path = joinPath;
-            file.websiteUrl = joinPath;
+            file.websitePath = joinPath;
             log('Skip:', colors.gray(fileName));
             cb(null, false);
           }
@@ -59,7 +59,7 @@ module.exports = function(options) {
             } else {
               log('Upload: ', colors.green(result.url));
               file.path = result.url;
-              file.websiteUrl = result.url;
+              file.websitePath = result.url;
               cb(null, result);
             }
           })
